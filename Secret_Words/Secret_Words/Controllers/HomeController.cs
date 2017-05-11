@@ -20,6 +20,7 @@ namespace Secret_Words.Controllers
         public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userman)
         {
             db = context;
+
             user = userman;
         }
         public IActionResult Index()
@@ -27,16 +28,21 @@ namespace Secret_Words.Controllers
             var word = db.Secret_Words
                 .OrderByDescending(am => am.TimeStamp).First();
 
-            return View(word);
+            return View();
         }
 
         public IActionResult AddWord(string Secret_Words)
         {
-            Secret_WordsModel newWord = new Secret_WordsModel();
-            newWord.TimeStamp = DateTime.Now;
+            WordModel newWord = new WordModel();
+
+            newWord.Time = DateTime.Now;
+
             newWord.Username = User.Identity.Name;
+
             newWord.Word = Secret_Words;
+
             db.Secret_Words.Add(newWord);
+
             db.SaveChanges();
 
             return Redirect(@"/Home/Index");
